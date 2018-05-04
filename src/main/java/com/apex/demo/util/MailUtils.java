@@ -32,11 +32,20 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
-/**
+/**  
  * 使用POP3协议接收邮件
- */
+ * @desc: demo  
+ * @author: yangcheng  
+ * @createTime: 2018年5月4日 下午4:33:13    
+ * @version: v1.0    
+ */    
 public class MailUtils {
 
+    /**  
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:33:27    
+     * @param args 
+     */  
     public static void main(String[] args) {
 
         try {
@@ -46,9 +55,12 @@ public class MailUtils {
         }
     }
 
-    /**
+    /**  
      * 接收邮件
-     */
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:33:39    
+     * @throws Exception  
+     */  
     @SuppressWarnings("restriction")
     public static void resceive() throws Exception {
         // 设置SSL连接、邮件环境
@@ -103,11 +115,14 @@ public class MailUtils {
         store.close();
     }
 
-    /**
+    /**  
      * 解析邮件
-     * 
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:34:07    
      * @param messages 要解析的邮件列表
-     */
+     * @throws MessagingException
+     * @throws IOException void  
+     */  
     public static void parseMessage(Message... messages)
             throws MessagingException, IOException {
         if (messages == null || messages.length < 1)
@@ -143,12 +158,14 @@ public class MailUtils {
         }
     }
 
-
-    /**
-     * 解析邮件
-     * 
-     * @param messages 要解析的邮件列表
-     */
+    /**  
+     * 删除邮件
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:34:37    
+     * @param messages
+     * @throws MessagingException
+     * @throws IOException void  
+     */  
     public static void deleteMessage(Message... messages)
             throws MessagingException, IOException {
         if (messages == null || messages.length < 1)
@@ -156,39 +173,37 @@ public class MailUtils {
 
         // 解析所有邮件
         for (int i = 0, count = messages.length; i < count; i++) {
-
-            /**
-             * 邮件删除
-             */
             Message message = messages[i];
             String subject = message.getSubject();
             // set the DELETE flag to true
             message.setFlag(Flags.Flag.DELETED, true);
             System.out.println("Marked DELETE for message: " + subject);
-
-
         }
     }
 
-    /**
+    /**  
      * 获得邮件主题
-     * 
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:35:13    
      * @param msg 邮件内容
      * @return 解码后的邮件主题
-     */
+     * @throws UnsupportedEncodingException
+     * @throws MessagingException String  
+     */  
     public static String getSubject(MimeMessage msg)
             throws UnsupportedEncodingException, MessagingException {
         return MimeUtility.decodeText(msg.getSubject());
     }
 
-    /**
+    /**  
      * 获得邮件发件人
-     * 
-     * @param msg 邮件内容
-     * @return 姓名 <Email地址>
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:35:47    
+     * @param msg
+     * @return  姓名 <Email地址>
      * @throws MessagingException
-     * @throws UnsupportedEncodingException
-     */
+     * @throws UnsupportedEncodingException String  
+     */  
     public static String getFrom(MimeMessage msg)
             throws MessagingException, UnsupportedEncodingException {
         String from = "";
@@ -208,23 +223,15 @@ public class MailUtils {
         return from;
     }
 
-    /**
+    /**  
      * 根据收件人类型，获取邮件收件人、抄送和密送地址。如果收件人类型为空，则获得所有的收件人
-     * <p>
-     * Message.RecipientType.TO 收件人
-     * </p>
-     * <p>
-     * Message.RecipientType.CC 抄送
-     * </p>
-     * <p>
-     * Message.RecipientType.BCC 密送
-     * </p>
-     * 
-     * @param msg 邮件内容
-     * @param type 收件人类型
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:36:15    
+     * @param msg
+     * @param type 收件人类型(TO 收件人,CC 抄送,BCC 密送)
      * @return 收件人1 <邮件地址1>, 收件人2 <邮件地址2>, ...
-     * @throws MessagingException
-     */
+     * @throws MessagingException String  
+     */  
     public static String getReceiveAddress(MimeMessage msg,
             Message.RecipientType type) throws MessagingException {
         StringBuffer receiveAddress = new StringBuffer();
@@ -242,19 +249,19 @@ public class MailUtils {
             receiveAddress.append(internetAddress.toUnicodeString())
                     .append(",");
         }
-
         receiveAddress.deleteCharAt(receiveAddress.length() - 1); // 删除最后一个逗号
-
         return receiveAddress.toString();
     }
 
-    /**
+    /**  
      * 获得邮件发送时间
-     * 
-     * @param msg 邮件内容
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:37:41    
+     * @param msg
+     * @param pattern
      * @return yyyy年mm月dd日 星期X HH:mm
-     * @throws MessagingException
-     */
+     * @throws MessagingException String  
+     */  
     public static String getSentDate(MimeMessage msg, String pattern)
             throws MessagingException {
         Date receivedDate = msg.getSentDate();
@@ -267,14 +274,15 @@ public class MailUtils {
         return new SimpleDateFormat(pattern).format(receivedDate);
     }
 
-    /**
+    /**  
      * 判断邮件中是否包含附件
-     * 
-     * @param msg 邮件内容
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:38:13    
+     * @param part
      * @return 邮件中存在附件返回true，不存在返回false
      * @throws MessagingException
-     * @throws IOException
-     */
+     * @throws IOException boolean  
+     */  
     public static boolean isContainAttachment(Part part)
             throws MessagingException, IOException {
         boolean flag = false;
@@ -300,8 +308,9 @@ public class MailUtils {
                     }
                 }
 
-                if (flag)
+                if (flag){
                     break;
+                }
             }
         } else if (part.isMimeType("message/rfc822")) {
             flag = isContainAttachment((Part) part.getContent());
@@ -309,24 +318,26 @@ public class MailUtils {
         return flag;
     }
 
-    /**
+    /**  
      * 判断邮件是否已读
-     * 
-     * @param msg 邮件内容
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:38:59    
+     * @param msg
      * @return 如果邮件已读返回true,否则返回false
-     * @throws MessagingException
-     */
+     * @throws MessagingException boolean  
+     */  
     public static boolean isSeen(MimeMessage msg) throws MessagingException {
         return msg.getFlags().contains(Flags.Flag.SEEN);
     }
 
-    /**
-     * 判断邮件是否需要阅读回执
-     * 
-     * @param msg 邮件内容
+    /** 
+     * 判断邮件是否需要阅读回执 
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:39:32    
+     * @param msg
      * @return 需要回执返回true,否则返回false
-     * @throws MessagingException
-     */
+     * @throws MessagingException boolean  
+     */  
     public static boolean isReplySign(MimeMessage msg)
             throws MessagingException {
         boolean replySign = false;
@@ -336,13 +347,14 @@ public class MailUtils {
         return replySign;
     }
 
-    /**
+    /**  
      * 获得邮件的优先级
-     * 
-     * @param msg 邮件内容
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:39:58    
+     * @param msg
      * @return 1(High):紧急 3:普通(Normal) 5:低(Low)
-     * @throws MessagingException
-     */
+     * @throws MessagingException String  
+     */  
     public static String getPriority(MimeMessage msg)
             throws MessagingException {
         String priority = "普通";
@@ -361,14 +373,15 @@ public class MailUtils {
         return priority;
     }
 
-    /**
+    /**  
      * 获得邮件文本内容
-     * 
-     * @param part 邮件体
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:41:03    
+     * @param part
      * @param content 存储邮件文本内容的字符串
      * @throws MessagingException
-     * @throws IOException
-     */
+     * @throws IOException void  
+     */  
     public static void getMailTextContent(Part part, StringBuffer content)
             throws MessagingException, IOException {
         // 如果是文本类型的附件，通过getContent方法可以取到文本内容，但这不是我们需要的结果，所以在这里要做判断
@@ -387,16 +400,17 @@ public class MailUtils {
         }
     }
 
-    /**
+    /**  
      * 保存附件
-     * 
-     * @param part 邮件中多个组合体中的其中一个组合体
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:41:44    
+     * @param part
      * @param destDir 附件保存目录
      * @throws UnsupportedEncodingException
      * @throws MessagingException
      * @throws FileNotFoundException
-     * @throws IOException
-     */
+     * @throws IOException void  
+     */  
     public static void saveAttachment(Part part, String destDir)
             throws UnsupportedEncodingException, MessagingException,
             FileNotFoundException, IOException {
@@ -429,15 +443,17 @@ public class MailUtils {
         }
     }
 
-    /**
+   
+    /**  
      * 读取输入流中的数据保存至指定目录
-     * 
-     * @param is 输入流
-     * @param fileName 文件名
-     * @param destDir 文件存储目录
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:42:21    
+     * @param is
+     * @param destDir
+     * @param fileName
      * @throws FileNotFoundException
-     * @throws IOException
-     */
+     * @throws IOException void  
+     */  
     private static void saveFile(InputStream is, String destDir,
             String fileName) throws FileNotFoundException, IOException {
         if(fileName == null || fileName.trim().equals(""))
@@ -461,13 +477,14 @@ public class MailUtils {
         bis.close();
     }
 
-    /**
+    /**  
      * 文本解码
-     * 
-     * @param encodeText 解码MimeUtility.encodeText(String text)方法编码后的文本
-     * @return 解码后的文本
-     * @throws UnsupportedEncodingException
-     */
+     * @author: yangcheng 
+     * @createTime: 2018年5月4日 下午4:42:43    
+     * @param encodeText
+     * @return
+     * @throws UnsupportedEncodingException String  
+     */  
     public static String decodeText(String encodeText)
             throws UnsupportedEncodingException {
         if (encodeText == null || "".equals(encodeText)) {
