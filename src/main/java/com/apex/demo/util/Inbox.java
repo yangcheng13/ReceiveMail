@@ -38,7 +38,7 @@ public class Inbox {
         Session session = Session.getDefaultInstance(props, null);
         // 设置连接邮件仓库的环境
         URLName url = new URLName("pop3", "pop.qq.com", 995, null,
-                "1430478198@qq.com", "usxqxwtjyzrsbach");
+                "1430478198@qq.com", "*******");
         Store store = null;
         Folder inbox = null;
         try {
