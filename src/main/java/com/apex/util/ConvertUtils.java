@@ -22,7 +22,7 @@ public class ConvertUtils {
     public static List<ValuationOfFundVo> convertMapToVo(
             List<Map<Integer, String>> excelValueMaps,
             Map<Integer, String> titleMap) {
-        List<ValuationOfFundVo> lst = new ArrayList<>();
+        List<ValuationOfFundVo> lst = new ArrayList<ValuationOfFundVo>();
         for (Map<Integer, String> m : excelValueMaps) {
             if (m.get(4) == null
                     || !StringUtils.isNumeric((CharSequence) m.get(0))) {

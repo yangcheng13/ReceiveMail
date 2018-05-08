@@ -63,7 +63,7 @@ public class TestImportExcel {
 //        File f = new File("D:/mailTest/玉泉831号-2018-05-02.xls");
         File f = new File("D:/mailTest/2018年05月03日383天津国投-渤海汇金-2017年第54号(其他)委托资产资产估值表.xls");
         InputStream inputStream = new FileInputStream(f);
-        Map<Integer,String> titleMap = new TreeMap<>();
+        Map<Integer,String> titleMap = new TreeMap<Integer,String>();
         List<Map<Integer, String>> importExcel = ExcelExtUtil.importExcel(inputStream,3,titleMap,"渤海汇金-2017年第54号(其他)委托资产");
         System.out.println("表头："+titleMap);
         List<ValuationOfFundVo> lst = ConvertUtils.convertMapToVo(importExcel, titleMap);

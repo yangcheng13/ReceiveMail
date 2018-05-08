@@ -34,7 +34,7 @@ public class ExcelUtil {
      * 用来验证excel与Vo中的类型是否一致 <br>
      * Map<栏位类型,只能是哪些Cell类型>
      */
-    private static Map<Class<?>, CellType[]> validateMap = new HashMap<>();
+    private static Map<Class<?>, CellType[]> validateMap = new HashMap<Class<?>, CellType[]>();
 
     static {
         validateMap.put(String[].class, new CellType[] {CellType.STRING});
@@ -399,13 +399,13 @@ public class ExcelUtil {
             LG.error("load excel file error", e);
             return null;
         }
-        List<T> list = new ArrayList<>();
+        List<T> list = new ArrayList<T>();
         Sheet sheet = workBook.getSheetAt(0);
         Iterator<Row> rowIterator = sheet.rowIterator();
         try {
-            List<ExcelLog> logList = new ArrayList<>();
+            List<ExcelLog> logList = new ArrayList<ExcelLog>();
             // Map<title,index>
-            Map<String, Integer> titleMap = new HashMap<>();
+            Map<String, Integer> titleMap = new HashMap<String, Integer>();
 
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
@@ -443,7 +443,7 @@ public class ExcelUtil {
                     continue;
                 }
                 if (clazz == Map.class) {
-                    Map<String, Object> map = new HashMap<>();
+                    Map<String, Object> map = new HashMap<String, Object>();
                     for (String k : titleMap.keySet()) {
                         Integer index = titleMap.get(k);
                         Cell cell = row.getCell(index);
@@ -663,8 +663,8 @@ public class ExcelUtil {
      */
     private static List<FieldForSortting> sortFieldByAnno(Class<?> clazz) {
         Field[] fieldsArr = clazz.getDeclaredFields();
-        List<FieldForSortting> fields = new ArrayList<>();
-        List<FieldForSortting> annoNullFields = new ArrayList<>();
+        List<FieldForSortting> fields = new ArrayList<FieldForSortting>();
+        List<FieldForSortting> annoNullFields = new ArrayList<FieldForSortting>();
         for (Field field : fieldsArr) {
             ExcelCell ec = field.getAnnotation(ExcelCell.class);
             if (ec == null) {

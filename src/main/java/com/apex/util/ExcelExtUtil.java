@@ -91,7 +91,7 @@ public class ExcelExtUtil {
             LG.error("load excel file error", e);
             return null;
         }
-        List<Map<Integer,String>> list = new ArrayList<>();
+        List<Map<Integer,String>> list = new ArrayList<Map<Integer,String>>();
         Sheet sheet = workBook.getSheetAt(0);
         String time = sheet.getRow(2).getCell(0).getStringCellValue();
         Iterator<Row> rowIterator = sheet.rowIterator();
@@ -127,7 +127,7 @@ public class ExcelExtUtil {
                             + " all row value is null!");
                     continue;
                 }
-                Map<Integer, String> map = new TreeMap<>();
+                Map<Integer, String> map = new TreeMap<Integer, String>();
                 for (Integer k : titleMap.keySet()) {
                     Cell cell = row.getCell(k);
                     // 判空
