@@ -83,7 +83,7 @@ public class ExcelExtUtil {
      * @return voList
      * @throws RuntimeException
      */
-    public static <T> Collection<T> importExcel(InputStream inputStream,Integer titleRowNum, Map<Integer,String> titleMap) {
+    public static List<Map<Integer,String>> importExcel(InputStream inputStream,Integer titleRowNum, Map<Integer,String> titleMap,String cp) {
         Workbook workBook;
         try {
             workBook = WorkbookFactory.create(inputStream);
@@ -91,7 +91,7 @@ public class ExcelExtUtil {
             LG.error("load excel file error", e);
             return null;
         }
-        List<T> list = new ArrayList<>();
+        List<Map<Integer,String>> list = new ArrayList<>();
         Sheet sheet = workBook.getSheetAt(0);
         String time = sheet.getRow(2).getCell(0).getStringCellValue();
         Iterator<Row> rowIterator = sheet.rowIterator();
@@ -127,7 +127,7 @@ public class ExcelExtUtil {
                             + " all row value is null!");
                     continue;
                 }
-                Map<Integer, Object> map = new TreeMap<>();
+                Map<Integer, String> map = new TreeMap<>();
                 for (Integer k : titleMap.keySet()) {
                     Cell cell = row.getCell(k);
                     // 判空
@@ -139,8 +139,9 @@ public class ExcelExtUtil {
                         map.put(k, value);
                     }
                 }
-                map.put(13, time.split("：")[1]);
-                list.add((T) map);
+                map.put(12, time.split("：")[1]);
+                map.put(13, cp);
+                list.add(map);
             }
         } catch (Exception e) {
             LG.error("parse excel file error", e);

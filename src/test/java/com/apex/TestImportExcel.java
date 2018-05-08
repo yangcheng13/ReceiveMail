@@ -15,7 +15,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import com.apex.util.DbUtils;
+import com.apex.util.ConvertUtils;
+import com.apex.util.DbExtUtils;
 import com.apex.util.ExcelExtUtil;
 import com.apex.util.ExcelLogs;
 import com.apex.util.ExcelUtil;
@@ -63,12 +64,10 @@ public class TestImportExcel {
         File f = new File("D:/mailTest/2018年05月03日383天津国投-渤海汇金-2017年第54号(其他)委托资产资产估值表.xls");
         InputStream inputStream = new FileInputStream(f);
         Map<Integer,String> titleMap = new TreeMap<>();
-        Collection<Map> importExcel = ExcelExtUtil.importExcel(inputStream,3, titleMap);
+        List<Map<Integer, String>> importExcel = ExcelExtUtil.importExcel(inputStream,3,titleMap,"渤海汇金-2017年第54号(其他)委托资产");
         System.out.println("表头："+titleMap);
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        for (Map m : importExcel) {
-            System.out.println(m);
-        }
+        List<ValuationOfFundVo> lst = ConvertUtils.convertMapToVo(importExcel, titleMap);
+        DbExtUtils.saveBatch(lst);
     }
 
 }

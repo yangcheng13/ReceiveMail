@@ -36,9 +36,23 @@ public class ValuationOfFundVo {
     @ExcelCell(index = 10)
     private String tpxx;// 停牌信息
     @ExcelCell(index = 11)
-    private String gzrq;// 估值日期
+    private String qyxx;// 权益信息
+    /**  
+     * @return the qyxx  
+     */
+    public String getQyxx() {
+        return qyxx;
+    }
+    /**  
+     * @param qyxx the qyxx to set  
+     */
+    public void setQyxx(String qyxx) {
+        this.qyxx = qyxx;
+    }
     @ExcelCell(index = 12)
-    private String type;// 估值表分类
+    private String gzrq;// 估值日期
+    @ExcelCell(index = 13)
+    private String cp;// 估值表分类（产品）
     /**  
      * @return the id  
      */
@@ -198,14 +212,14 @@ public class ValuationOfFundVo {
     /**  
      * @return the type  
      */
-    public String getType() {
-      return type;
+    public String getCp() {
+      return cp;
     }
     /**  
      * @param type the type to set  
      */
-    public void setType(String type) {
-      this.type = type;
+    public void setCp(String type) {
+      this.cp = type;
     }
    
 
