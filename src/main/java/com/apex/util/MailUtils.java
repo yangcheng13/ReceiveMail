@@ -13,7 +13,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.Security;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import javax.mail.Address;
 import javax.mail.BodyPart;
@@ -129,6 +131,15 @@ public class MailUtils {
         // 解析所有邮件
         for (int i = 0; i < count; i++) {
             MimeMessage msg = (MimeMessage) messages[i];
+            //增量解析，只解析昨天的邮件
+            Date receivedDate = msg.getSentDate();
+            Calendar cal=Calendar.getInstance();
+            cal.add(Calendar.DATE,-1);
+            Date yesterDay =cal.getTime();
+            if(receivedDate.getTime() - yesterDay.getTime()<0){
+                continue;
+            }
+            
             System.out.println("------------------解析第" + msg.getMessageNumber()
                     + "封邮件-------------------- ");
             System.out.println("主题: " + getSubject(msg));
@@ -142,7 +153,7 @@ public class MailUtils {
             boolean isContainerAttachment = isContainAttachment(msg);
             System.out.println("是否包含附件：" + isContainerAttachment);
             if (isContainerAttachment) {
-                saveAttachment(msg, "D:\\mailTest\\" + i + "\\"); // 保存附件
+                saveAttachment(msg, PropertyUtil.getProperty("mail.attachment.savepath")); // 保存附件
             }
             StringBuffer content = new StringBuffer(30);
             getMailTextContent(msg, content);
@@ -472,6 +483,59 @@ public class MailUtils {
         }
         bos.close();
         bis.close();
+    }
+    
+    /**  
+     * @author: yangcheng 
+     * @createTime: 2018年5月10日 上午9:22:18    
+     * @param strPath
+     * @param fileLst void  
+     */  
+    public static void getFilesBySubfix(String strPath, List<File> fileLst) {
+        File dir = new File(strPath);
+        File[] files = dir.listFiles(); // 该文件目录下文件全部放入数组
+        if (files != null) {
+            for (int i = 0; i < files.length; i++) {
+                String fileName = files[i].getName();
+                if (files[i].isDirectory()) { // 判断是文件还是文件夹
+                    getFilesBySubfix(files[i].getAbsolutePath(), fileLst); // 获取文件绝对路径
+                } else if (fileName.endsWith(".xls") || fileName.endsWith(".xlsx")) { // 判断文件名是excel
+                    String strFileName = files[i].getAbsolutePath();
+                    System.out.println("---" + strFileName);
+                    fileLst.add(files[i]);
+                } else {
+                    continue;
+                }
+            }
+        }
+    }
+    
+    /**
+     * 删除某个文件夹下的所有文件夹和文件
+     */
+    public static boolean deletefile(String delpath)
+            throws FileNotFoundException, IOException {
+        try {
+            File file = new File(delpath);
+            if (!file.isDirectory()) {
+                file.delete();
+            } else {
+                String[] filelist = file.list();
+                for (int i = 0; i < filelist.length; i++) {
+                    File delfile = new File(delpath + "\\" + filelist[i]);
+                    if (!delfile.isDirectory()) {
+                        delfile.delete();
+                    } else {
+                        deletefile(delpath + "\\" + filelist[i]);
+                    }
+                }
+                file.delete();
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("deletefile() Exception:" + e.getMessage());
+        }
+        return true;
     }
 
     /**  

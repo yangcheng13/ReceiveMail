@@ -1,41 +1,41 @@
 package com.apex.util;
 
-import org.apache.commons.beanutils.BeanComparator;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.ComparatorUtils;
-import org.apache.commons.collections.comparators.ComparableComparator;
-import org.apache.commons.collections.comparators.ComparatorChain;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.text.MessageFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
-/**
- * The <code>ExcelUtil</code> 与 {@link ExcelCell}搭配使用
- *
- * @author sargeras.wang
- * @version 1.0, Created at 2013年9月14日
- */
+
+/**  
+ * @desc: ReceiveMail  
+ * @author: yangcheng  
+ * @createTime: 2018年5月8日 下午5:36:22    
+ * @version: v1.0    
+ */    
 public class ExcelExtUtil {
 
     private static Logger LG = LoggerFactory.getLogger(ExcelExtUtil.class);
 
-    /**
+    /**  
      * 获取单元格值
-     *
+     * @author: yangcheng 
+     * @createTime: 2018年5月8日 下午5:36:03    
      * @param cell
-     * @return
-     */
+     * @return Object  
+     */  
     private static Object getCellValue(Cell cell) {
         if (cell == null || (cell.getCellTypeEnum() == CellType.STRING
                 && StringUtils.isBlank(cell.getStringCellValue()))) {
@@ -70,19 +70,16 @@ public class ExcelExtUtil {
             return null;
     }
 
-
-
-    /**
-     * 把Excel的数据封装成voList
-     *
-     * @param clazz vo的Class
-     * @param inputStream excel输入流
-     * @param pattern 如果有时间数据，设定输入格式。默认为"yyy-MM-dd"
-     * @param logs 错误log集合
-     * @param arrayCount 如果vo中有数组类型,那就按照index顺序,把数组应该有几个值写上.
-     * @return voList
-     * @throws RuntimeException
-     */
+    /**  
+     * Excel的数据封装成List<Map>
+     * @author: yangcheng 
+     * @createTime: 2018年5月8日 下午5:35:11    
+     * @param inputStream
+     * @param titleRowNum
+     * @param titleMap
+     * @param cp
+     * @return List<Map<Integer,String>>  
+     */  
     public static List<Map<Integer,String>> importExcel(InputStream inputStream,Integer titleRowNum, Map<Integer,String> titleMap,String cp) {
         Workbook workBook;
         try {
@@ -139,7 +136,7 @@ public class ExcelExtUtil {
                         map.put(k, value);
                     }
                 }
-                map.put(12, time.split("：")[1]);
+                map.put(12, time.split("：")[1].replace("年", "-").replace("月", "-").replace("日", ""));
                 map.put(13, cp);
                 list.add(map);
             }
@@ -148,7 +145,5 @@ public class ExcelExtUtil {
         }
         return list;
     }
-
-
 
 }
